@@ -27,10 +27,6 @@ export default {
 }
 
 .header {
-    padding: 3rem 1rem 1.5rem;
-}
-
-.footer {
-    padding: 1rem;
+  padding: 3rem 0;
 }
 </style>
