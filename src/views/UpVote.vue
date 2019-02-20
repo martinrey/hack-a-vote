@@ -1,7 +1,7 @@
 <template>
   <div class="content">
-    <h4 v-if="listProjects === {}">Aguarde un momento mientras traemos los proyectos.</h4>
-    <section class="list">
+    <h4 v-if="!isLoaded">Aguarde un momento mientras traemos los proyectos.</h4>
+    <section class="list" v-if="isLoaded">
       <Post v-for="post of listHotPosts" :post="post" :isHot="true" :key="post.id"/>
       <Post v-for="post of listProjects" :post="post" :key="post.id"/>
     </section>
@@ -17,16 +17,18 @@ import Post from "@/components/Post";
 export default {
   name: "UpVote",
   computed: {
-    ...mapGetters('post', ['listProjects', 'listHotPosts']),
+    ...mapGetters('post', ['listProjects', 'listHotPosts', 'isLoaded'])
   },
   methods: {
     applyMassonry () {
-      let msnry = new Masonry('.list', {
-        itemSelector: '.post',
-        columnWidth: '.post',
-        percentPosition: true,
-        gutter: 10
-      })
+      if (this.isLoaded) {
+        setTimeout(() => { new Masonry('.list', {
+          itemSelector: '.post',
+          columnWidth: '.post',
+          percentPosition: true,
+          gutter: 10
+        }) }, 0)
+      }
     }
   },
   beforeCreate() {
@@ -35,10 +37,10 @@ export default {
   },
   updated () {
     this.$store.dispatch("user/getCurrentVote");
-    },
+  },
   watch: {
-    listProjects (oldList, newList) {
-       this.applyMassonry();
+    isLoaded (o, n) {
+      this.applyMassonry();
     }
   },
   components: {

@@ -5,6 +5,7 @@ export default {
   namespaced: true,
   state: {
     list: {},
+    loaded: false,
     hotPosts: []
   },
   mutations: {
@@ -13,14 +14,19 @@ export default {
     },
     SET_HOT_POSTS(state, hotPosts) {
       state.hotPosts = hotPosts;
+    },
+    SET_LOADED(state, loaded) {
+      state.loaded = loaded;
     }
   },
   getters: {
     listProjects: state => state.list,
+    isLoaded: state => state.loaded,
     listHotPosts: state => state.hotPosts
   },
   actions: {
     getList(context) {
+      context.commit("SET_LOADED", false);
       return FBFirestore.collection('projects')
         .get()
         .then(snapshot => {
@@ -40,9 +46,11 @@ export default {
       (bronce && hotPosts.push(list[bronce]) && delete list[bronce]);
       context.commit("SET_HOT_POSTS", hotPosts);
       context.commit("SET_LIST", list);
+      context.commit("SET_LOADED", true);
     },
     getVotes(context) {
       let votes = {}
+      context.commit("SET_LOADED", false);
       FBFirestore.collection('votes')
         .get()
         .then(snapshot => {

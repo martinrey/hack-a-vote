@@ -120,7 +120,7 @@ export default {
   &:nth-child(1) .hotPost {
     background: linear-gradient(45deg,  rgba(242,215,12,1) 0%,rgba(255,255,255,1) 56%,rgba(252,235,0,1) 96%);
     i {
-      color: rgba(223,182,103,1);
+      color: #F2D70C;
     }
 
     &:before{
@@ -140,7 +140,7 @@ export default {
   &:nth-child(2) .hotPost {
     background: linear-gradient(45deg,  rgba(160,160,160,1) 0%,rgba(232,232,232,1) 56%);
     i {
-      color: rgba(160,160,160,1);
+      color: #A0A0A0;
     }
 
     &:before{
@@ -160,7 +160,7 @@ export default {
   &:nth-child(3) .hotPost {
     background: linear-gradient(45deg,  rgba(223,182,103,1) 0%,rgba(249,243,232,1) 56%,rgba(231,192,116,1) 96%); 
     i {
-      color: rgba(242,215,50,1);
+      color: #D19C35;
     }
 
     &:before{
