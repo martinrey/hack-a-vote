@@ -41,6 +41,15 @@ export default {
           context.commit("SET_VOTE", id);
         })
     },
+    getCurrentVote(context) {
+      let { uid } = context.state.user
+      FBFirestore.collection('votes')
+        .doc(uid).get()
+        .then(snapshot => {
+          let { id } = snapshot.data()
+          context.commit("SET_VOTE", id);
+        })
+    },
     login(context, user) {
       context.commit("SET_USER", user);
       context.dispatch("getCurrentVote");
