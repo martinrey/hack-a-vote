@@ -1,7 +1,8 @@
 <template>
   <div class="content">
-    <h4 v-if="!isLoaded">Aguarde un momento mientras traemos los proyectos.</h4>
-    <section class="list" v-if="isLoaded">
+    <Menu/>
+    <h4 v-if="!isLoaded" class="loader"><i class="fa fa-sync fa-spin"></i></h4>
+    <section class="posts" v-if="isLoaded">
       <Post v-for="post of listHotPosts" :post="post" :isHot="true" :key="post.id"/>
       <Post v-for="post of listProjects" :post="post" :key="post.id"/>
     </section>
@@ -13,6 +14,7 @@
 import { mapGetters } from "vuex";
 import Masonry from 'masonry-layout';
 import Post from "@/components/Post";
+import Menu from "@/components/Menu";
 
 export default {
   name: "UpVote",
@@ -22,7 +24,7 @@ export default {
   methods: {
     applyMassonry () {
       if (this.isLoaded) {
-        setTimeout(() => { new Masonry('.list', {
+        setTimeout(() => { new Masonry('.posts', {
           itemSelector: '.post',
           columnWidth: '.post',
           percentPosition: true,
@@ -44,17 +46,27 @@ export default {
     }
   },
   components: {
-    Post
+    Post,
+    Menu
   }
 };
 </script>
 
-<style scoped>
-.list {
-  box-sizing: border-box;
-  max-width: 100vw;
-  overflow: hidden;
-  padding: 25px;
-  text-align: center;
+<style lang="scss" scoped>
+.content {
+  .loader {
+    margin: 25px;
+  }
+  .posts {
+    box-sizing: border-box;
+    max-width: 100vw;
+    overflow: hidden;
+    padding: 5px 4rem;
+    text-align: center;
+
+    @media screen and (max-width: 1024px) {
+      padding: 5px 1rem;
+    }
+  }
 }
 </style>
