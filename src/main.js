@@ -17,7 +17,7 @@ FBApp.auth().onAuthStateChanged(user => {
       router,
       store,
       beforeCreate() {
-        store.dispatch("user/init", { FBApp, FBUIApp });
+        store.dispatch("user/init", { FBUIApp });
       },
       created() {
         if (user) {

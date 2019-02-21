@@ -1,8 +1,8 @@
 <template>
   <section class="loginSection">
     <h1 v-if="!isValidUser && user !== null">
-      Usted ingreso con <b>{{ user.email }}</b>
-      <br/>Utilice una cuenta de Mulesoft para ingresar
+      Hey, <b>{{ user.email }}</b>!
+      <br/>Please use a Mulesoft account to log in.
     </h1>
     <div id="firebaseui-auth-container"></div>
   </section>
@@ -34,7 +34,7 @@ export default {
 <style>
 .loginSection {
   display: inline-block;
-  margin: 100px 0;
+  margin: 50px 0;
   min-height: 50px;
 }
 </style>

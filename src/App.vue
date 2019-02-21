@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
 }
 </script>
 
@@ -27,7 +27,7 @@ export default {
 }
 
 .header {
-  padding: 3rem 0;
+  padding: 40px 0;
 }
 
 .footer {
