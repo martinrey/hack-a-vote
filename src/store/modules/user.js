@@ -1,19 +1,16 @@
 /* eslint-disable */
-import { FBFirestore } from '@/helpers/firebaseConfig'
+import { FBFirestore, FBApp } from '@/helpers/firebaseConfig'
+import router from '@/router';
 
 export default {
   namespaced: true,
   state: {
     user: null,
     currentVote: null,
-    FBApp: null,
     FBUIApp: null,
     session_started: new Date()
   },
   mutations: {
-    SET_FBAPP(state, fbData) {
-      state.FBApp = fbData.FBApp;
-    },
     SET_FBUIAPP(state, FBUIApp) {
       state.FBUIApp = FBUIApp;
     },
@@ -32,9 +29,17 @@ export default {
       state.user ? state.user.email.includes("@mulesoft.com") : false
   },
   actions: {
-    init(context, fbData) {
-      context.commit("SET_FBAPP", fbData.FBApp);
-      context.commit("SET_FBUIAPP", fbData.FBUIApp);
+    init(context, { FBUIApp }) {
+      context.commit("SET_FBUIAPP", FBUIApp);
+    },
+    getCurrentVote(context) {
+      let { uid } = context.state.user
+      FBFirestore.collection('votes')
+        .doc(uid).get()
+        .then(snapshot => {
+          let { id } = snapshot.data()
+          context.commit("SET_VOTE", id);
+        })
     },
     getCurrentVote(context) {
       let { uid } = context.state.user
@@ -48,6 +53,17 @@ export default {
     login(context, user) {
       context.commit("SET_USER", user);
       context.dispatch("getCurrentVote");
+    },
+    logout(context) {
+      try {
+        FBApp.auth().signOut().then(() => {
+          context.commit("SET_USER", null);
+          context.commit("SET_VOTE", null);
+          router.push('/');
+        })
+      } catch (e) {
+        console.log(e)
+      }
     },
     vote(context, { id }) {
       let { uid } = context.state.user

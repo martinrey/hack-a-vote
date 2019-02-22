@@ -1,10 +1,10 @@
 <template>
   <div class="content">
-    <h4 v-if="!isLoaded">Aguarde un momento mientras traemos los proyectos.</h4>
-    <section class="list" v-if="isLoaded">
-      <input type="text" v-model="search" placeholder="Search title..">
+    <Menu/>
+    <h4 v-if="!isLoaded" class="loader"><i class="fa fa-sync fa-spin"></i></h4>
+    <section class="posts" v-if="isLoaded">
       <Post v-for="post of listHotPosts" :post="post" :isHot="true" :key="post.id"/>
-      <Post v-for="post of filteredProjects" :post="post" :key="post.id"/>
+      <Post v-for="post of listProjects" :post="post" :key="post.id"/>
     </section>
   </div>
 </template>
@@ -14,42 +14,29 @@
 import { mapGetters } from "vuex";
 import Masonry from "masonry-layout";
 import Post from "@/components/Post";
+import Menu from "@/components/Menu";
 
 export default {
   name: "UpVote",
-  data: function() {
+  data () {
     return {
-      search: ""
-    };
+      msnry: null
+    }
   },
   computed: {
-    ...mapGetters("post", ["listProjects", "listHotPosts", "isLoaded"]),
-    filteredProjects() {
-      return Object.entries(this.listProjects)
-        .filter(([key, value]) => {
-          value.title.includes(this.search.toLowerCase());
-        })
-        .reduce((obj, key) => {
-          return {
-            ...obj,
-            [key]: this.listProjects[key]
-          };
-        }, {});
-    }
+    ...mapGetters("post", ["listProjects", "listHotPosts", "isLoaded", "isFiltered"]),
   },
   methods: {
-    applyMassonry() {
+    setMasonry () {
       if (this.isLoaded) {
-        setTimeout(() => {
-          new Masonry(".list", {
-            itemSelector: ".post",
-            columnWidth: ".post",
-            percentPosition: true,
-            gutter: 10
-          });
-        }, 0);
+        setTimeout(() => { new Masonry('.posts', {
+          itemSelector: '.post',
+          columnWidth: '.post',
+          percentPosition: true,
+          gutter: 10
+        }) }, 0)
       }
-    }
+   }
   },
   beforeCreate() {
     this.$store.dispatch("post/getList");
@@ -59,22 +46,36 @@ export default {
     this.$store.dispatch("user/getCurrentVote");
   },
   watch: {
+    isFiltered(o, n) {
+      this.setMasonry();
+      this.$store.commit("post/SET_FILTERED", false);
+    },
     isLoaded(o, n) {
-      this.applyMassonry();
+      this.setMasonry();
     }
   },
   components: {
-    Post
+    Post,
+    Menu
   }
 };
 </script>
 
-<style scoped>
-.list {
-  box-sizing: border-box;
-  max-width: 100vw;
-  overflow: hidden;
-  padding: 25px;
-  text-align: center;
+<style lang="scss" scoped>
+.content {
+  .loader {
+    margin: 25px;
+  }
+  .posts {
+    box-sizing: border-box;
+    max-width: 100vw;
+    overflow: hidden;
+    padding: 5px 4rem;
+    text-align: center;
+
+    @media screen and (max-width: 1024px) {
+      padding: 5px 1rem;
+    }
+  }
 }
 </style>
