@@ -1,13 +1,12 @@
 <template>
-  <article v-if="(post !== null) && (post.filtered)" class="card post">
+  <article v-if="shouldDisplay" class="card post">
     <header class="card-header">
-      <p class="card-header-title">
-        {{ post.title }}
-      </p>
+      <p class="card-header-title">{{ post.title }}</p>
       <span class="hotPost" v-if="isHot">
         <i class="fas fa-star" aria-hidden="true"></i>
       </span>
     </header>
+    <div class="card-content has-text-left is-small bordered">{{ post.category }}</div>
     <div class="card-content">
       <div class="content has-text-left">
         {{ post.content }}
@@ -29,9 +28,14 @@ import { mapState } from "vuex";
 export default {
   name: "Post",
   computed: {
-    ...mapState("user", ["currentVote"])
+    ...mapState("user", ["currentVote"]),
+    shouldDisplay () {
+      let { post, activeCategory } = this
+      return (post !== null) && (post.filtered) && ((activeCategory !== "") ? activeCategory === post.category : true)
+      
+    }
   },
-  props: ['post', 'isHot'],
+  props: ['post', 'isHot', 'activeCategory'],
   methods: {
     vote () {
       if (this.currentVote !== this.post.id) {
@@ -51,6 +55,11 @@ export default {
   position: relative;
   transition: cubic-bezier(0.19, 1, 0.22, 1);
   width: calc(24% - 30px);
+
+  .bordered {
+    border-bottom: #F2F2F2 thin solid;
+    padding: 8px 1.5rem;
+  }
 
   .card-header {
     box-sizing: border-box;

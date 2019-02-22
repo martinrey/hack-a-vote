@@ -5,9 +5,11 @@ export default {
   namespaced: true,
   state: {
     list: {},
+    hotPosts: [],
+    categories: [],
+    activeCategory: "",
     loaded: false,
-    filtered: false,
-    hotPosts: []
+    filtered: false
   },
   mutations: {
     SET_LIST(state, list) {
@@ -15,6 +17,12 @@ export default {
     },
     SET_HOT_POSTS(state, hotPosts) {
       state.hotPosts = hotPosts;
+    },
+    SET_CATEGORIES(state, categories) {
+      state.categories = categories;
+    },
+    SET_ACTIVE_CATEGORY(state, activeCategory) {
+      state.activeCategory = activeCategory;
     },
     SET_LOADED(state, loaded) {
       state.loaded = loaded;
@@ -25,9 +33,11 @@ export default {
   },
   getters: {
     listProjects: state => state.list,
+    listHotPosts: state => state.hotPosts,
+    categories: state => state.categories,
+    activeCategory: state => state.activeCategory,
     isLoaded: state => state.loaded,
-    isFiltered: state => state.filtered,
-    listHotPosts: state => state.hotPosts
+    isFiltered: state => state.filtered
   },
   actions: {
     getList(context) {
@@ -35,11 +45,14 @@ export default {
       return FBFirestore.collection('projects')
         .get()
         .then(snapshot => {
-          const posts = {}
+          const posts = {},
+                categories = {}
           snapshot.forEach(doc => {
             posts[doc.id] = Object.assign({}, { id: doc.id, filtered: true }, doc.data())
+            categories[posts[doc.id].category] = true
           })
           context.commit("SET_LIST", posts);
+          context.commit("SET_CATEGORIES", Object.keys(categories));
         })
     },
     updateVotes(context, votes) {
@@ -81,7 +94,9 @@ export default {
     filter (context, search) {
       context.dispatch("filterList", { search, listName: 'hotPosts' })
       context.dispatch("filterList", { search, listName: 'list'})
+    },
+    filterCategory (context, category) {
+      context.commit("SET_ACTIVE_CATEGORY", category);
     }
-
   }
 };
