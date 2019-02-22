@@ -1,10 +1,10 @@
 <template>
   <div class="content">
     <Menu/>
-    <h4 v-if="!isLoaded" class="loader"><i class="fa fa-sync fa-spin"></i></h4>
+    <h4 v-if="!isLoaded" class="siteLoader"><i class="fa fa-sync fa-spin"></i></h4>
     <section class="posts" v-if="isLoaded">
-      <Post v-for="post of listHotPosts" :post="post" :isHot="true" :key="post.id"/>
-      <Post v-for="post of listProjects" :post="post" :key="post.id"/>
+      <Post v-for="post in listHotPosts" :post="post" :isHot="true" :key="post.id" :activeCategory="activeCategory"/>
+      <Post v-for="post in listProjects" :post="post" :key="post.id" :activeCategory="activeCategory"/>
     </section>
   </div>
 </template>
@@ -24,7 +24,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters("post", ["listProjects", "listHotPosts", "isLoaded", "isFiltered"]),
+    ...mapGetters('post', ['listProjects', 'listHotPosts', 'isLoaded', 'isFiltered', 'activeCategory']),
   },
   methods: {
     setMasonry () {
@@ -46,6 +46,9 @@ export default {
     this.$store.dispatch("user/getCurrentVote");
   },
   watch: {
+    activeCategory(o, n) {
+      this.setMasonry();
+    },
     isFiltered(o, n) {
       this.setMasonry();
       this.$store.commit("post/SET_FILTERED", false);
@@ -63,7 +66,7 @@ export default {
 
 <style lang="scss" scoped>
 .content {
-  .loader {
+  .siteLoader {
     margin: 25px;
   }
   .posts {
@@ -74,7 +77,7 @@ export default {
     text-align: center;
 
     @media screen and (max-width: 1024px) {
-      padding: 5px 1rem;
+      padding: 20px 1rem;
     }
   }
 }
