@@ -6,6 +6,7 @@ export default {
   state: {
     list: {},
     loaded: false,
+    filtered: false,
     hotPosts: []
   },
   mutations: {
@@ -17,11 +18,15 @@ export default {
     },
     SET_LOADED(state, loaded) {
       state.loaded = loaded;
+    },
+    SET_FILTERED(state, filtered) {
+      state.filtered = filtered;
     }
   },
   getters: {
     listProjects: state => state.list,
     isLoaded: state => state.loaded,
+    isFiltered: state => state.filtered,
     listHotPosts: state => state.hotPosts
   },
   actions: {
@@ -32,7 +37,7 @@ export default {
         .then(snapshot => {
           const posts = {}
           snapshot.forEach(doc => {
-            posts[doc.id] = Object.assign({}, { id: doc.id }, doc.data())
+            posts[doc.id] = Object.assign({}, { id: doc.id, filtered: true }, doc.data())
           })
           context.commit("SET_LIST", posts);
         })
@@ -63,6 +68,20 @@ export default {
           })
           context.dispatch("updateVotes", votes)
       })
+    },
+    filterList (context, { search, listName }) {
+      let list = context.state[listName]
+      for (let index in list) {
+        let post = list[index],
+            hasSearch = (post.title) ? post.title.toLowerCase().includes(search) : false
+        post.filtered = hasSearch
+      }
+      context.commit("SET_FILTERED", true);
+    },
+    filter (context, search) {
+      context.dispatch("filterList", { search, listName: 'hotPosts' })
+      context.dispatch("filterList", { search, listName: 'list'})
     }
+
   }
 };

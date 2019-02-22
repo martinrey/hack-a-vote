@@ -1,5 +1,5 @@
 <template>
-  <article v-if="post !== null" class="card post">
+  <article v-if="(post !== null) && (post.filtered)" class="card post">
     <header class="card-header">
       <p class="card-header-title">
         {{ post.title }}
@@ -49,6 +49,7 @@ export default {
   border-radius: 5px;
   margin-bottom: 10px;
   position: relative;
+  transition: cubic-bezier(0.19, 1, 0.22, 1);
   width: calc(24% - 30px);
 
   .card-header {

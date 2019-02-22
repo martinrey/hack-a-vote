@@ -12,17 +12,22 @@
 <script>
 /* eslint-disable */
 import { mapGetters } from "vuex";
-import Masonry from 'masonry-layout';
+import Masonry from "masonry-layout";
 import Post from "@/components/Post";
 import Menu from "@/components/Menu";
 
 export default {
   name: "UpVote",
+  data () {
+    return {
+      msnry: null
+    }
+  },
   computed: {
-    ...mapGetters('post', ['listProjects', 'listHotPosts', 'isLoaded'])
+    ...mapGetters("post", ["listProjects", "listHotPosts", "isLoaded", "isFiltered"]),
   },
   methods: {
-    applyMassonry () {
+    setMasonry () {
       if (this.isLoaded) {
         setTimeout(() => { new Masonry('.posts', {
           itemSelector: '.post',
@@ -31,18 +36,22 @@ export default {
           gutter: 10
         }) }, 0)
       }
-    }
+   }
   },
   beforeCreate() {
     this.$store.dispatch("post/getList");
     this.$store.dispatch("post/getVotes");
   },
-  updated () {
+  updated() {
     this.$store.dispatch("user/getCurrentVote");
   },
   watch: {
-    isLoaded (o, n) {
-      this.applyMassonry();
+    isFiltered(o, n) {
+      this.setMasonry();
+      this.$store.commit("post/SET_FILTERED", false);
+    },
+    isLoaded(o, n) {
+      this.setMasonry();
     }
   },
   components: {
