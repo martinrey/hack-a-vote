@@ -2,12 +2,13 @@ import Vue from "vue";
 import App from "@/App.vue";
 import router from "@/router";
 import store from "@/store";
-import VueFire from "vuefire";
+import { firestorePlugin } from "vuefire";
 import "./../node_modules/bulma/css/bulma.css";
 import { FBApp, FBUIApp } from "@/helpers/firebaseConfig";
 
 Vue.config.productionTip = false;
-Vue.use(VueFire);
+Vue.use(firestorePlugin);
+
 
 let app = "";
 FBApp.auth().onAuthStateChanged(user => {
