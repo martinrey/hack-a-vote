@@ -7,7 +7,7 @@
     <a href="#">
         <img src="https://circleci.com/gh/martinrey/hack-a-vote/tree/master.svg?style=svg" alt="Build" />
     </a>
-    <a href="https://snyk.io/test/github/martinrey/hack-a-vote">
+    <a href="https://snyk.io/test/github/martinrey/hack-a-vote/badge.svg">
     <a href="https://vuejs.org/">
         <img src="https://img.shields.io/badge/Vue-2.5.17-brightgreen.svg" alt="vue version" />
     </a>
