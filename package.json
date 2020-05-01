@@ -7,7 +7,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "snyk-protect": "snyk protect",
-    "prepare": "yarn snyk-protect"
+    "prepare": "npm run snyk-protect && yarn snyk-protect"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -15,7 +15,7 @@
     "firebase": "^6.0.2",
     "firebaseui": "^4.0.0",
     "masonry-layout": "^4.2.2",
-    "snyk": "^1.164.0",
+    "snyk": "^1.316.1",
     "vue": "^2.6.10",
     "vue-router": "^3.0.6",
     "vuefire": "^2.0.0-alpha.24",
