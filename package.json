@@ -10,7 +10,7 @@
     "prepare": "yarn snyk-protect"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "bulma": "^0.7.4",
     "firebase": "^6.0.2",
     "firebaseui": "^4.0.0",
